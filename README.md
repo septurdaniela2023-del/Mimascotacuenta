@@ -1,1 +1,22 @@
 # Mimascotacuenta
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Título de la página</title>
+</head>
+<body>
+    "<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Animales de Amor 
+  </button>
+  <ul class="dropdown-menu">
+    <li><button class="dropdown-item" type="button">Monos</button></li>
+    <li><button class="dropdown-item" type="button">Gatos</button></li>
+    <li><button class="dropdown-item" type="button">Perro </button></li>
+  </ul>
+</div>"
+ https://getbootstrap.com/#:~:text=%3Cdiv%20class,%3C/div%3E
+</body>
+</html>
