@@ -1,23 +1,138 @@
-# Mimascotacuenta
-
-<!DOCTYPE html>
+# Mimascotacuenta 
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <title>Título de la página</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi Mascota Cuenta - Gestión</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Configuración de fondos para secciones específicas */
+    .bg-custom {
+      background-size: cover;
+      background-position: center;
+      border-radius: 15px;
+      padding: 30px;
+      margin-top: 20px;
+      position: relative;
+      overflow: hidden;
+      min-height: 300px; /* Tamaño mediano visible */
+    }
+
+    /* Capa oscura para que el texto resalte sobre la imagen */
+    .overlay-text {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 20px;
+      border-radius: 10px;
+      height: 100%;
+    }
+
+    .header-image {
+      background-image: url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=1000&auto=format&fit=crop');
+      height: 40vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+  </style>
 </head>
-<body>
-    "<div class="dropdown">
-  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Animales de Amor 
-  </button>
-  <ul class="dropdown-menu">
-    <li><button class="dropdown-item" type="button">Monos</button></li>
-    <li><button class="dropdown-item" type="button">Gatos</button></li>
-    <li><button class="dropdown-item" type="button">Perro </button></li>
-  </ul>
-</div>"
- https://getbootstrap.com/#:~:text=%3Cdiv%20class,%3C/div%3E
+<body class="bg-light">
+
+  <!-- Encabezado Principal -->
+  <div class="container-fluid header-image mb-4">
+    <h1 class="display-4 fw-bold">ELLOS TE ACOMPAÑAN</h1>
+  </div>
+
+  <div class="container pb-5">
+    
+    <!-- 1. Buscador de Pacientes -->
+    <div class="bg-custom shadow" style="background-image: url('https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?q=80&w=800&auto=format&fit=crop');">
+      <div class="overlay-text border border-primary">
+        <h3><i class="bi bi-search"></i> Buscador de Pacientes</h3>
+        <p>Introduce el nombre o código de la mascota:</p>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Ej: Bruno, Luna..." aria-label="Nombre de mascota">
+          <button class="btn btn-primary" type="button">Buscar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Alerta de Próxima Cita -->
+    <div class="mt-4">
+      <div class="alert alert-warning d-flex align-items-center shadow-sm" role="alert">
+        <strong class="me-2">¡Aviso!</strong> Tienes una próxima cita de vacunación programada para el 20 de mayo.
+      </div>
+    </div>
+
+    <!-- 3. Tabla de Vacunas con fondo -->
+    <div class="bg-custom shadow" style="background-image: url('https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=800&auto=format&fit=crop');">
+      <div class="overlay-text">
+        <h2 class="text-center mb-3">Esquema de Vacunación</h2>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Especie</th>
+                <th>Vacuna</th>
+                <th>Frecuencia</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>🐶 Canina</td>
+                <td>Sextuple</td>
+                <td>Anual</td>
+              </tr>
+              <tr>
+                <td>🐱 Felina</td>
+                <td>Triple Felina</td>
+                <td>Anual</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. Acordeón para Historial Médico -->
+    <div class="bg-custom shadow mt-4" style="background-image: url('https://images.unsplash.com/photo-1591768793355-74d7c5263156?q=80&w=800&auto=format&fit=crop');">
+      <div class="overlay-text">
+        <h2 class="mb-4">Historial Médico</h2>
+        <div class="accordion" id="accordionHistorial">
+          <!-- Pestaña Consulta -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
+                Consulta General - 10/05/2026
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionHistorial">
+              <div class="accordion-body">
+                Paciente en buen estado general. Peso: 12kg. Revisión de rutina completada.
+              </div>
+            </div>
+          </div>
+          <!-- Pestaña Vacuna -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false">
+                Vacuna Antirrábica - 15/04/2026
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionHistorial">
+              <div class="accordion-body">
+                Refuerzo anual aplicado con éxito. Sin reacciones adversas reportadas.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-contribucin ramal rusmary 
