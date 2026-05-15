@@ -1,204 +1,137 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VetControl - Gestión de Pacientes</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-    <style>
-        body { background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .card { border: none; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .search-input { border-radius: 30px; padding-left: 2.5rem; }
-        .search-icon { position: absolute; left: 1.2rem; top: 50%; transform: translateY(-50%); color: #6c757d; }
-        .badge-species { font-size: 0.8rem; padding: 0.4em 0.8em; }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mi Mascota Cuenta - Gestión</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Configuración de fondos para secciones específicas */
+    .bg-custom {
+      background-size: cover;
+      background-position: center;
+      border-radius: 15px;
+      padding: 30px;
+      margin-top: 20px;
+      position: relative;
+      overflow: hidden;
+      min-height: 300px; /* Tamaño mediano visible */
+    }
+
+    /* Capa oscura para que el texto resalte sobre la imagen */
+    .overlay-text {
+      background: rgba(255, 255, 255, 0.85);
+      padding: 20px;
+      border-radius: 10px;
+      height: 100%;
+    }
+
+    .header-image {
+      background-image: url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?q=80&w=1000&auto=format&fit=crop');
+      height: 40vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.7);
+    }
+  </style>
 </head>
-<body>
+<body class="bg-light">
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            
-            <!-- Encabezado -->
-            <div class="text-center mb-5">
-                <h1 class="fw-bold text-primary"><i class="bi bi-shield-plus"></i> VetControl</h1>
-                <p class="text-muted">Expediente Clínico Digital</p>
-            </div>
-            
+  <!-- Encabezado Principal -->
+  <div class="container-fluid header-image mb-4">
+    <h1 class="display-4 fw-bold">ELLOS TE ACOMPAÑAN</h1>
+  </div>
 
-            <!-- 1 .Buscador -->
-            <div class="card mb-4">
-                <div class="card-body p-4">
-                    <div class="position-relative">
-                        <i class="bi bi-search search-icon"></i>
-                        <input type="text" id="searchInput" class="form-control form-control-lg search-input" 
-                               placeholder="Buscar por nombre, dueño o especie...">
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tabla de Pacientes -->
-            <div class="card">
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0" id="patientsTable">
-                        <thead class="table-light">
-                            <tr>
-                                <th class="ps-4">Paciente</th>
-                                <th>Dueño</th>
-                                <th>Especie</th>
-                                <th class="text-end pe-4">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBody">
-                            <!-- Los datos se cargan aquí con JS -->
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Mensaje Sin Resultados -->
-            <div id="noResults" class="text-center mt-5 d-none">
-                <i class="bi bi-search-heart fs-1 text-muted"></i>
-                <p class="mt-2 text-muted">No encontramos ningún paciente con esos datos.</p>
-            </div>
-
+  <div class="container pb-5">
+    
+    <!-- 1. Buscador de Pacientes -->
+    <div class="bg-custom shadow" style="background-image: url('https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?q=80&w=800&auto=format&fit=crop');">
+      <div class="overlay-text border border-primary">
+        <h3><i class="bi bi-search"></i> Buscador de Pacientes</h3>
+        <p>Introduce el nombre o código de la mascota:</p>
+        <div class="input-group mb-3">
+          <input type="text" class="form-control" placeholder="Ej: Bruno, Luna..." aria-label="Nombre de mascota">
+          <button class="btn btn-primary" type="button">Buscar</button>
         </div>
+      </div>
     </div>
-</div>
 
-<!-- MODAL DE FICHA MÉDICA (Acordeón + Alerta) -->
-<div class="modal fade" id="patientModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content" style="border-radius: 20px;">
-            <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title fw-bold" id="modalTitle">Nombre de Mascota</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body p-4">
-                
-                <!-- ALERTA DE PRÓXIMA CITA (Color Amarillo/Warning) -->
-                <div id="nextAppointmentAlert" class="alert alert-warning border-0 shadow-sm d-flex align-items-center mb-4" role="alert">
-                    <i class="bi bi-calendar-event-fill me-3 fs-4"></i>
-                    <div>
-                        <strong>Próxima Cita:</strong> <span id="appointmentDate">15 de Junio - Vacuna Rabia</span>
-                    </div>
-                </div>
+    <!-- 2. Alerta de Próxima Cita -->
+    <div class="mt-4">
+      <div class="alert alert-warning d-flex align-items-center shadow-sm" role="alert">
+        <strong class="me-2">¡Aviso!</strong> Tienes una próxima cita de vacunación programada para el 20 de mayo.
+      </div>
+    </div>
 
-                <h6 class="fw-bold mb-3"><i class="bi bi-clock-history"></i> Historial Médico</h6>
-                
-                <!-- ACORDEÓN DE HISTORIAL -->
-                <div class="accordion accordion-flush border rounded" id="medicalHistoryAccordion">
-                    <!-- Las entradas del historial se cargan aquí -->
-                </div>
-
-            </div>
+    <!-- 3. Tabla de Vacunas con fondo -->
+    <div class="bg-custom shadow" style="background-image: url('https://images.unsplash.com/photo-1583337130417-3346a1be7dee?q=80&w=800&auto=format&fit=crop');">
+      <div class="overlay-text">
+        <h2 class="text-center mb-3">Esquema de Vacunación</h2>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>Especie</th>
+                <th>Vacuna</th>
+                <th>Frecuencia</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>🐶 Canina</td>
+                <td>Sextuple</td>
+                <td>Anual</td>
+              </tr>
+              <tr>
+                <td>🐱 Felina</td>
+                <td>Triple Felina</td>
+                <td>Anual</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
-</div>
 
-<!-- Lógica de Datos y Buscador -->
-<script>
-    // 1. BASE DE DATOS SIMULADA
-    const patients = [
-        {
-            id: 1,
-            name: "Firulais",
-            owner: "Juan Pérez",
-            species: "Perro",
-            breed: "Golden Retriever",
-            nextAppt: "12/06/2026 - Refuerzo Parvovirus",
-            history: [
-                { title: "Vacuna Antirrábica", date: "10/01/2026", details: "Aplicada dosis anual. Sin reacciones adversas." },
-                { title: "Consulta General", date: "15/03/2026", details: "Control de peso y limpieza de oídos. Todo normal." }
-            ]
-        },
-        {
-            id: 2,
-            name: "Michi",
-            owner: "María García",
-            species: "Gato",
-            breed: "Siamés",
-            nextAppt: "20/07/2026 - Desparasitación interna",
-            history: [
-                { title: "Desparasitación", date: "05/05/2026", details: "Se aplicó pipeta externa y pastilla interna." }
-            ]
-        }
-    ];
-
-    const tableBody = document.getElementById('tableBody');
-    const searchInput = document.getElementById('searchInput');
-    const noResults = document.getElementById('noResults');
-    const patientModal = new bootstrap.Modal(document.getElementById('patientModal'));
-
-    // 2. FUNCIÓN PARA RENDERIZAR TABLA
-    function displayPatients(filter = "") {
-        const filtered = patients.filter(p => 
-            p.name.toLowerCase().includes(filter.toLowerCase()) || 
-            p.owner.toLowerCase().includes(filter.toLowerCase()) ||
-            p.species.toLowerCase().includes(filter.toLowerCase())
-        );
-
-        tableBody.innerHTML = "";
-        
-        if (filtered.length === 0) {
-            noResults.classList.remove('d-none');
-        } else {
-            noResults.classList.add('d-none');
-            filtered.forEach(p => {
-                tableBody.innerHTML += `
-                    <tr>
-                        <td class="ps-4 fw-bold text-dark">${p.name} <small class="text-muted d-block">${p.breed}</small></td>
-                        <td>${p.owner}</td>
-                        <td><span class="badge bg-info-subtle text-info-emphasis border border-info-subtle rounded-pill">${p.species}</span></td>
-                        <td class="text-end pe-4">
-                            <button class="btn btn-sm btn-primary rounded-pill px-3" onclick="showDetails(${p.id})">
-                                <i class="bi bi-eye"></i> Ver Ficha
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-    }
-
-    // 3. FUNCIÓN PARA MOSTRAR EL ACORDEÓN Y LA ALERTA
-    window.showDetails = function(id) {
-        const p = patients.find(patient => patient.id === id);
-        document.getElementById('modalTitle').innerText = `Ficha Médica: ${p.name}`;
-        
-        // Configurar Alerta Amarilla (Próxima Cita)
-        document.getElementById('appointmentDate').innerText = p.nextAppt;
-
-        // Configurar Acordeón
-        const accordion = document.getElementById('medicalHistoryAccordion');
-        accordion.innerHTML = p.history.map((item, index) => `
-            <div class="accordion-item">
-                <h2 class="accordion-header">
-                    <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-${index}">
-                        ${item.title} <span class="ms-auto text-muted small me-3">${item.date}</span>
-                    </button>
-                </h2>
-                <div id="flush-${index}" class="accordion-collapse collapse" data-bs-parent="#medicalHistoryAccordion">
-                    <div class="accordion-body text-muted">${item.details}</div>
-                </div>
+    <!-- 4. Acordeón para Historial Médico -->
+    <div class="bg-custom shadow mt-4" style="background-image: url('https://images.unsplash.com/photo-1591768793355-74d7c5263156?q=80&w=800&auto=format&fit=crop');">
+      <div class="overlay-text">
+        <h2 class="mb-4">Historial Médico</h2>
+        <div class="accordion" id="accordionHistorial">
+          <!-- Pestaña Consulta -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true">
+                Consulta General - 10/05/2026
+              </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionHistorial">
+              <div class="accordion-body">
+                Paciente en buen estado general. Peso: 12kg. Revisión de rutina completada.
+              </div>
             </div>
-        `).join('');
+          </div>
+          <!-- Pestaña Vacuna -->
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="headingTwo">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false">
+                Vacuna Antirrábica - 15/04/2026
+              </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionHistorial">
+              <div class="accordion-body">
+                Refuerzo anual aplicado con éxito. Sin reacciones adversas reportadas.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-        patientModal.show();
-    }
+  </div>
 
-    // Event Listener Buscador
-    searchInput.addEventListener('input', (e) => displayPatients(e.target.value));
-
-    // Carga inicial
-    displayPatients();
-</script>
-
-<!-- Bootstrap JS Bundle -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
